@@ -39,14 +39,16 @@ def upload():
         
 def daftar():
     page_token = None
-    nomor = 0
+    nomor = 1
     while True :
-        response = konekapi.files().list(q=kueri,spaces='drive', fields = 'nextPageToken,''files(id,name)',pageToken = page_token).execute()
+        response = konekapi.files().list(q=kueri,spaces='drive', fields = 'nextPageToken,''files(id,name,size,modifiedTime)',pageToken = page_token).execute()
         for file in response.get('files', []):
             namafile = file.get("name")
             idfile = file.get("id")
+            ukuranfile = int(file.get("size")) /1024000
+            tanggal = file.get("modifiedTime") 
             daftarfile.append(idfile)
-            print("[",nomor, "]. ", namafile, " id : " , idfile)
+            print("[",nomor, "]. ", namafile, " id : " , idfile, " size : " ,ukuranfile, "MB   tanggal : ",tanggal)
             nomor += 1
         files.extend(response.get('files',[]))
         page_token = response.get('nextPageToken', None)
