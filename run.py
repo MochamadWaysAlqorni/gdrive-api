@@ -4,6 +4,7 @@ from googleapiclient.http import MediaIoBaseDownload
 from Google import Create_Service
 import mimetypes
 import io
+from apiclient import errors
 
 CLIENT_SECRET_FILE = 'yourOAuthSecret.json'
 API_NAME = 'drive'
