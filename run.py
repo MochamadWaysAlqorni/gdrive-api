@@ -75,8 +75,26 @@ def download():
         f.write(fh.read())
         f.close
 
+def hapus():
+    daftar()
+    print("\n")
+    nomorurut = int(input("Masukkan [index] file yang akan dihapus : ")) -1
+    idfiledel = daftarfile[nomorurut]
+    fileinfo = konekapi.files().get(fileId=idfiledel).execute()
+    namafile = fileinfo.get("name")
+    yakin = input("Yakin ingin menghapus ? (y/n)")
+    if yakin == "y":
+        try : 
+            konekapi.files().delete(fileId=idfiledel).execute()
+            print("\n Sukses Menghapus file :" ,namafile )
+        except errors.HttpError as galat:
+            print("Terjadi masalah saat menghapus ", namafile, "kode :", galat)
+        menu()
+    else :
+        menu()
+
 def menu():
-    pilih = int(input("Selamat datang\n1. Lihat daftar\t2. Unduh berkas\t3. Unggah berkas \n(1, 2, 3)?: \n"))
+    pilih = int(input("Selamat datang\n1. Lihat daftar   2. Unduh berkas   3. Unggah berkas   4. Hapus\n(1, 2, 3, 4)?: "))
     match pilih :
         case 0 :
             exit()
@@ -84,18 +102,26 @@ def menu():
             print("Daftar file : [index]")
             daftar()
             print("\n")
+            daftarfile.clear()
             menu()
         case 2 : 
             download()
             print("\n")
+            daftarfile.clear()
             menu()
         case 3 : 
             upload()
             print("\n")
+            daftarfile.clear()
             menu()
+        case 4 : 
+            hapus()
+            daftarfile.clear()
+            print("\n")
         case default :
             print("pilihan tidak tersedia")
             print("\n")
+            daftarfile.clear()
             menu()
     
 if __name__ == "__main__":
